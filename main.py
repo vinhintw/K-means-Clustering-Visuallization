@@ -12,7 +12,7 @@ try:
 
 
     AUTHOR = "Vinh in Taiwan"
-    version = "1.00.02"
+    version = "1.0.2"
     display_width = 1200
     display_height = 700
     screen = pygame.display.set_mode((display_width, display_height))
@@ -61,6 +61,10 @@ try:
             vector_list = numpy.array(points)
             return vector_list
 
+        def has_converged(centers, new_centers):
+        # return True if two sets of centers are the same
+            return set([tuple(a) for a in centers]) == set([tuple(a) for a in new_centers])
+
         # Set variable
         K = 0
         error = 0
@@ -68,6 +72,8 @@ try:
         points = []
         clusters = []
         labels = []
+        prev_clusters = []
+        list_clusters = []
         changed = True
         check_algorithm_button = False
 
@@ -253,7 +259,6 @@ try:
                         if changed and K != 0 and points != [] and clusters != []:
                             iteration += 1
 
-
                         # Skip when cluster is None
                         if clusters == []:
                             continue
@@ -262,7 +267,7 @@ try:
                         for p in points:
                             distances_to_cluster = []
                             for c in clusters:
-                                dis = distance(p,c)
+                                dis = distance(p, c)
                                 distances_to_cluster.append(dis)
 
                             min_distance = min(distances_to_cluster)
@@ -282,26 +287,28 @@ try:
 
                             # Avoid divide by 0
                             if count != 0:
-                                new_cluster_x = sum_x/count
-                                new_cluster_y = sum_y/count
-                                try:
-                                    if numpy.all(clusters[i] != [new_cluster_x, new_cluster_y]):
-                                        clusters[i] = [new_cluster_x, new_cluster_y]
-                                        # Set check variable to True if cluster_positions changed
-                                        changed = True
+                                new_cluster_x = sum_x / count
+                                new_cluster_y = sum_y / count
 
-                                    else:
-                                        changed = False
+                                clusters[i] = [new_cluster_x, new_cluster_y]
+                                list_clusters.append(clusters[i])
 
-                                except:
-                                    iteration = 0
-                                    print('Erorr')
+                        # print(prev_clusters)
+                        # print(list_clusters)
+                        # Set check variable to True if cluster_positions changed
+                        if has_converged(prev_clusters, list_clusters):
+                            changed = False
 
-                        #print("Run pressed")
+                        else:
+                            changed = True
+                            prev_clusters = list_clusters
+                            list_clusters = []
+
+                        # print("Run pressed")
 
                         # Check Algorithm converges
                         if changed == False:
-                            print('Converged')
+                            print("Converged")
 
                     # Random button
                     if 1000 < mouse_x < 1150 and 275 < mouse_y < 325:
@@ -311,8 +318,9 @@ try:
                         changed = True
                         check_algorithm_button = False
                         for i in range(K):
-                            random_point = [randint(0,700), randint(0,500)]
+                            random_point = [randint(0, 700), randint(0, 500)]
                             clusters.append(random_point)
+                            prev_clusters.append(random_point)
                         if K != 0:
                             print("Random pressed")
 
