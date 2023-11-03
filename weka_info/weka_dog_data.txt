@@ -1,0 +1,54 @@
+=== Run information ===
+
+Scheme:       weka.clusterers.SimpleKMeans -init 0 -max-candidates 100 -periodic-pruning 10000 -min-density 2.0 -t1 -1.25 -t2 -1.0 -N 3 -A "weka.core.EuclideanDistance -R first-last" -I 500 -num-slots 1 -S 10
+Relation:     dog_RGB_data
+Instances:    405000
+Attributes:   5
+              Row
+              Column
+              Red
+              Green
+              Blue
+Test mode:    evaluate on training data
+
+
+=== Clustering model (full training set) ===
+
+
+kMeans
+======
+
+Number of iterations: 14
+Within cluster sum of squared errors: 60453.82927098339
+
+Initial starting points (random):
+
+Cluster 0: 25,514,233,230,225
+Cluster 1: 428,443,198,194,183
+Cluster 2: 445,426,199,196,187
+
+Missing values globally replaced with mean/mode
+
+Final cluster centroids:
+                         Cluster#
+Attribute    Full Data          0          1          2
+            (405000.0) (166279.0) (105864.0) (132857.0)
+=======================================================
+Row              225.5   119.6313    346.626    261.485
+Column           450.5   445.0356   480.4736   433.4552
+Red           133.3676    49.1704   147.3585   227.5975
+Green         128.5334    38.9603   147.7291   225.3443
+Blue          103.8436    28.3861    77.7595   219.0679
+
+
+
+
+Time taken to build model (full training data) : 1.37 seconds
+
+=== Model and evaluation on training set ===
+
+Clustered Instances
+
+0      166279 ( 41%)
+1      105864 ( 26%)
+2      132857 ( 33%)
